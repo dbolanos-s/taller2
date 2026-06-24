@@ -17,7 +17,23 @@ let loadData = () => {
                 return doc;
             })
             .then(doc => {
-                console.log(doc);                
+                const items = doc.getElementsByTagName('row');
+                const tbody = document.getElementById('transacciones');
+                const limit = Math.min(20, items.length);
+
+                for (let i = 0; i < limit; i++) {
+                    const date   = items[i].getElementsByTagName('Date')[0].textContent;
+                    const coffee = items[i].getElementsByTagName('coffee_name')[0].textContent;
+                    const money  = parseFloat(items[i].getElementsByTagName('money')[0].textContent);
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${date}</td>
+                        <td>${coffee}</td>
+                        <td>${fmtUSD.format(money)}</td>
+                    `;
+                    tbody.appendChild(tr);
+                }
             })
 
     } catch (err) {
